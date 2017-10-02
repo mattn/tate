@@ -23,10 +23,16 @@ textを縦書きに
 　　をに　
 ```
 
-## Requirements
-
 ## Installation
+
+```
+go get github.com/mattn/tate
+```
 
 ## License
 
+MIT
+
 ## Author
+
+Yasuhiro Matsumoto (a.k.a. mattn)
