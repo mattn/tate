@@ -14,6 +14,34 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
+var replacerHankana = strings.NewReplacer(
+	`ｶﾞ`, `ガ`,
+	`ｷﾞ`, `ギ`,
+	`ｸﾞ`, `グ`,
+	`ｹﾞ`, `ゲ`,
+	`ｺﾞ`, `ゴ`,
+	`ｻﾞ`, `ザ`,
+	`ｼﾞ`, `ジ`,
+	`ｽﾞ`, `ズ`,
+	`ｾﾞ`, `ゼ`,
+	`ｿﾞ`, `ゾ`,
+	`ﾀﾞ`, `ダ`,
+	`ﾁﾞ`, `ヂ`,
+	`ﾂﾞ`, `ヅ`,
+	`ﾃﾞ`, `デ`,
+	`ﾄﾞ`, `ド`,
+	`ﾊﾞ`, `バ`,
+	`ﾋﾞ`, `ビ`,
+	`ﾌﾞ`, `ブ`,
+	`ﾍﾞ`, `ベ`,
+	`ﾎﾞ`, `ボ`,
+	`ﾊﾟ`, `パ`,
+	`ﾋﾟ`, `ピ`,
+	`ﾌﾟ`, `プ`,
+	`ﾍﾟ`, `ペ`,
+	`ﾎﾟ`, `ポ`,
+)
+
 var replacerUtf8 = strings.NewReplacer(
 	` `, `　`,
 	`↑`, `→`,
@@ -116,7 +144,7 @@ func tate(w io.Writer, r io.Reader) error {
 	}
 
 	s := strings.TrimSpace(strings.Replace(string(b), "\r", "", -1))
-	lines := strings.Split(replacerUtf8.Replace(s), "\n")
+	lines := strings.Split(replacerUtf8.Replace(replacerHankana.Replace(s)), "\n")
 
 	max := 0
 	for _, l := range lines {
