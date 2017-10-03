@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -100,13 +100,20 @@ var replacerWin = strings.NewReplacer(
 	`︐`, ` '`,
 )
 
-func main() {
-	b, err := ioutil.ReadAll(os.Stdin)
+func tate(w io.Writer, r io.Reader) error {
+	b, err := ioutil.ReadAll(r)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	isCmd := runtime.GOOS == "windows" && isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdin.Fd())
+	isCmd := false
+	if runtime.GOOS == "windows" {
+		if out, ok := w.(*os.File); ok {
+			if isatty.IsTerminal(out.Fd()) && !isatty.IsCygwinTerminal(out.Fd()) {
+				isCmd = true
+			}
+		}
+	}
 
 	s := strings.TrimSpace(strings.Replace(string(b), "\r", "", -1))
 	lines := strings.Split(replacerUtf8.Replace(s), "\n")
@@ -132,14 +139,21 @@ func main() {
 					if isCmd {
 						s = replacerWin.Replace(s)
 					}
-					fmt.Print(s)
 				} else {
-					fmt.Print(" " + string(r))
+					s = " " + string(r)
 				}
 			} else {
-				fmt.Print("　")
+				s = "　"
 			}
+			w.Write([]byte(s))
 		}
-		fmt.Println()
+		w.Write([]byte("\n"))
+	}
+	return nil
+}
+
+func main() {
+	if err := tate(os.Stdout, os.Stdin); err != nil {
+		log.Fatal(err)
 	}
 }
