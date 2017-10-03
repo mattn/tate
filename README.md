@@ -1,5 +1,10 @@
 # tate
 
+[![Build Status](https://travis-ci.org/mattn/tate.png?branch=master)](https://travis-ci.org/mattn/tate)
+[![Coverage Status](https://coveralls.io/repos/mattn/tate/badge.png?branch=HEAD)](https://coveralls.io/r/mattn/tate?branch=HEAD)
+[![GoDoc](https://godoc.org/github.com/mattn/tate?status.svg)](http://godoc.org/github.com/mattn/tate)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mattn/tate)](https://goreportcard.com/report/github.com/mattn/tate)
+
 縦書き変換
 
 ## Usage
