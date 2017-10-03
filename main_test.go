@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
 )
@@ -17,5 +18,20 @@ func TestTate(t *testing.T) {
 	want := buf.String()
 	if got != want {
 		t.Fatalf("want %v, but %v:", want, got)
+	}
+}
+
+type errReader struct {
+}
+
+func (r *errReader) Read(b []byte) (int, error) {
+	return 0, io.ErrUnexpectedEOF
+}
+
+func TestFail(t *testing.T) {
+	var buf bytes.Buffer
+	err := tate(&buf, &errReader{})
+	if err == nil {
+		t.Fatal("should be error")
 	}
 }
