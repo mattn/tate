@@ -14,35 +14,6 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-var replacerWin = strings.NewReplacer(
-	` `, `　`,
-	`↑`, `→`,
-	`↓`, `←`,
-	`←`, `↑`,
-	`→`, `↓`,
-	`ー`, `｜`,
-	`─`, `｜`,
-	`−`, `｜`,
-	`－`, `｜`,
-	`—`, `︱`,
-	`〜`, `∫`,
-	`～`, `∫`,
-	`／`, `＼`,
-	`…`, `:`,
-	`‥`, `:`,
-	`：`, `--`,
-	`:`, `--`,
-	`；`, `--`,
-	`;`, `--`,
-	`＝`, `||`,
-	`=`, `||`,
-	`-`, `|`,
-	`ｰ`, `|`,
-	`_`, `|`,
-	`,`, "`",
-	`､`, "`",
-)
-
 var replacerUtf8 = strings.NewReplacer(
 	` `, `　`,
 	`↑`, `→`,
@@ -100,6 +71,35 @@ var replacerUtf8 = strings.NewReplacer(
 	`､`, `︑`,
 )
 
+var replacerWin = strings.NewReplacer(
+	`︒`, ` ﾟ`,
+	`︑`, " `",
+	`︱`, `| `,
+	`︙`, `: `,
+	`︰`, `: `,
+	`︓`, ` :`,
+	`︔`, ` ;`,
+	`॥`, `||`,
+	`॥`, `||`,
+	`︵`, `__`,
+	`︶`, `~~`,
+	`﹇`, `__`,
+	`﹈`, `~~`,
+	`︷`, ` ^`,
+	`︿`, ` ^`,
+	`﹀`, `v`,
+	`︸`, `v`,
+	`﹁`, " \x02",
+	`﹂`, "\x03 ",
+	`﹃`, " \x02",
+	`﹄`, "\x03 ",
+	`︻`, " \x02",
+	`︼`, "\x03 ",
+	`︗`, " \x02",
+	`︘`, "\x03 ",
+	`︐`, ` '`,
+)
+
 func main() {
 	b, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
@@ -109,12 +109,7 @@ func main() {
 	isCmd := runtime.GOOS == "windows" && isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdin.Fd())
 
 	s := strings.TrimSpace(strings.Replace(string(b), "\r", "", -1))
-	if isCmd {
-		s = replacerWin.Replace(s)
-	} else {
-		s = replacerUtf8.Replace(s)
-	}
-	lines := strings.Split(s, "\n")
+	lines := strings.Split(replacerUtf8.Replace(s), "\n")
 
 	max := 0
 	for _, l := range lines {
@@ -133,7 +128,11 @@ func main() {
 					r = rs[i]
 				}
 				if runewidth.RuneWidth(r) > 1 {
-					fmt.Print(string(r))
+					s = string(r)
+					if isCmd {
+						s = replacerWin.Replace(s)
+					}
+					fmt.Print(s)
 				} else {
 					fmt.Print(" " + string(r))
 				}
