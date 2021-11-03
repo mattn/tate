@@ -16,7 +16,7 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
-const name = "twty"
+const name = "tate"
 
 const version = "0.0.1"
 
