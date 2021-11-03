@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -13,6 +15,12 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
 )
+
+const name = "twty"
+
+const version = "0.0.1"
+
+var revision = "HEAD"
 
 var replacerHankana = strings.NewReplacer(
 	`ｶﾞ`, `ガ`,
@@ -181,6 +189,15 @@ func tate(w io.Writer, r io.Reader) error {
 }
 
 func main() {
+	var showVersion bool
+	flag.BoolVar(&showVersion, "V", false, "Print the version")
+	flag.Parse()
+
+	if showVersion {
+		fmt.Printf("%s %s (rev: %s/%s)\n", name, version, revision, runtime.Version())
+		return
+	}
+
 	if err := tate(os.Stdout, os.Stdin); err != nil {
 		log.Fatal(err)
 	}
