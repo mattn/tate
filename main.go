@@ -18,7 +18,7 @@ import (
 
 const name = "tate"
 
-const version = "0.0.2"
+const version = "0.0.3"
 
 var revision = "HEAD"
 
@@ -151,7 +151,7 @@ func tate(w io.Writer, r io.Reader) error {
 		}
 	}
 
-	s := strings.TrimSpace(strings.Replace(string(b), "\r", "", -1))
+	s := strings.TrimSuffix(strings.Replace(string(b), "\r", "", -1), " 　")
 	lines := strings.Split(replacerUtf8.Replace(replacerHankana.Replace(s)), "\n")
 
 	max := 0
