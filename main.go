@@ -18,7 +18,7 @@ import (
 
 const name = "tate"
 
-const version = "0.0.3"
+const version = "0.0.4"
 
 var revision = "HEAD"
 
@@ -136,7 +136,11 @@ var replacerWin = strings.NewReplacer(
 	`︐`, ` '`,
 )
 
-func tate(w io.Writer, r io.Reader) error {
+type option struct {
+	reverse bool
+}
+
+func tate(w io.Writer, r io.Reader, o option) error {
 	b, err := ioutil.ReadAll(r)
 	if err != nil {
 		return err
@@ -151,8 +155,14 @@ func tate(w io.Writer, r io.Reader) error {
 		}
 	}
 
-	s := strings.TrimSuffix(strings.Replace(string(b), "\r", "", -1), " 　")
+	s := strings.TrimRight(strings.Replace(string(b), "\r", "", -1), " 　\r\n")
 	lines := strings.Split(replacerUtf8.Replace(replacerHankana.Replace(s)), "\n")
+
+	if o.reverse {
+		for i, l := 0, len(lines); i < l/2; i++ {
+			lines[i], lines[l-i-1] = lines[l-i-1], lines[i]
+		}
+	}
 
 	max := 0
 	for _, l := range lines {
@@ -189,8 +199,10 @@ func tate(w io.Writer, r io.Reader) error {
 }
 
 func main() {
+	var reverse bool
 	var showVersion bool
-	flag.BoolVar(&showVersion, "V", false, "Print the version")
+	flag.BoolVar(&reverse, "r", false, "reverse")
+	flag.BoolVar(&showVersion, "V", false, "print the version")
 	flag.Parse()
 
 	if showVersion {
@@ -198,7 +210,7 @@ func main() {
 		return
 	}
 
-	if err := tate(os.Stdout, os.Stdin); err != nil {
+	if err := tate(os.Stdout, os.Stdin, option{reverse: reverse}); err != nil {
 		log.Fatal(err)
 	}
 }
