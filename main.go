@@ -18,7 +18,7 @@ import (
 
 const name = "tate"
 
-const version = "0.0.4"
+const version = "0.0.5"
 
 var revision = "HEAD"
 
@@ -101,7 +101,7 @@ var replacerUtf8 = strings.NewReplacer(
 	`｢`, `﹁`,
 	`｣`, `﹂`,
 	`-`, `| `,
-	`ｰ`, `| `,
+	`ｰ`, `|`,
 	`_`, `| `,
 	`,`, `︐`,
 	`､`, `︑`,
@@ -155,7 +155,7 @@ func tate(w io.Writer, r io.Reader, o option) error {
 		}
 	}
 
-	s := strings.TrimRight(strings.Replace(string(b), "\r", "", -1), " 　\r\n")
+	s := strings.TrimRight(strings.Replace(string(b), "\r", "", -1), " 　\n")
 	lines := strings.Split(replacerUtf8.Replace(replacerHankana.Replace(s)), "\n")
 
 	if o.reverse {
