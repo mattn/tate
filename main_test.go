@@ -10,7 +10,7 @@ import (
 func TestTate(t *testing.T) {
 	var buf bytes.Buffer
 	r := strings.NewReader("Golangを使い、\ntextを縦書きに\n変換するコマンドを\n書いたので、\n今後活用したい。\n")
-	err := tate(&buf, r)
+	err := tate(&buf, r, option{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func (r *errReader) Read(b []byte) (int, error) {
 
 func TestFail(t *testing.T) {
 	var buf bytes.Buffer
-	err := tate(&buf, &errReader{})
+	err := tate(&buf, &errReader{}, option{})
 	if err == nil {
 		t.Fatal("should be error")
 	}
