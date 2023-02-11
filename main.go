@@ -155,7 +155,10 @@ func tate(w io.Writer, r io.Reader, o option) error {
 		}
 	}
 
-	s := strings.TrimRight(strings.Replace(string(b), "\r", "", -1), " 　\n")
+	s := string(b)
+	s = strings.Replace(s, "\r", "", -1)
+	s = strings.Replace(s, "\t", "    ", -1)
+	s = strings.TrimRight(s, " 　\n")
 	lines := strings.Split(replacerUtf8.Replace(replacerHankana.Replace(s)), "\n")
 
 	if o.reverse {
