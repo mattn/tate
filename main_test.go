@@ -61,6 +61,19 @@ func TestTateAsciiBars(t *testing.T) {
 	}
 }
 
+func TestTateAsciiSymbols(t *testing.T) {
+	var buf bytes.Buffer
+	err := tate(&buf, strings.NewReader("/~\n"), option{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := buf.String()
+	want := "＼\n ∫\n"
+	if got != want {
+		t.Fatalf("want %v, but %v", want, got)
+	}
+}
+
 type errReader struct {
 }
 
