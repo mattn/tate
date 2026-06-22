@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strings"
 
+	"golang.org/x/text/unicode/norm"
 	"golang.org/x/text/width"
 
 	"github.com/mattn/go-isatty"
@@ -173,6 +174,7 @@ func tate(w io.Writer, r io.Reader, o option) error {
 	s = strings.Replace(s, "\r", "", -1)
 	s = strings.Replace(s, "\t", "    ", -1)
 	s = strings.TrimRight(s, " 　\n")
+	s = norm.NFC.String(s)
 	lines := strings.Split(replacerUtf8.Replace(replacerHankana.Replace(s)), "\n")
 
 	if o.reverse {
