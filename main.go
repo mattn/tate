@@ -23,6 +23,9 @@ const version = "0.0.9"
 var revision = "HEAD"
 
 var replacerHankana = strings.NewReplacer(
+	`ｳﾞ`, `ヴ`,
+	`ﾜﾞ`, `ヷ`,
+	`ｦﾞ`, `ヺ`,
 	`ｶﾞ`, `ガ`,
 	`ｷﾞ`, `ギ`,
 	`ｸﾞ`, `グ`,
