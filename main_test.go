@@ -22,6 +22,19 @@ func TestTate(t *testing.T) {
 	}
 }
 
+func TestTateHalfwidthVoicedKana(t *testing.T) {
+	var buf bytes.Buffer
+	err := tate(&buf, strings.NewReader("ｳﾞﾜﾞｦﾞ\n"), option{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := buf.String()
+	want := "ヴ\nヷ\nヺ\n"
+	if got != want {
+		t.Fatalf("want %v, but %v", want, got)
+	}
+}
+
 type errReader struct {
 }
 
