@@ -61,6 +61,8 @@ var replacerUtf8 = strings.NewReplacer(
 	`←`, `↑`,
 	`→`, `↓`,
 	`。`, `︒`,
+	`．`, `︒`,
+	`.`, `︒`,
 	`、`, `︑`,
 	`ー`, `｜`,
 	`─`, `｜`,
@@ -110,6 +112,7 @@ var replacerUtf8 = strings.NewReplacer(
 	`ｰ`, `|`,
 	`_`, `｜`,
 	`,`, `︐`,
+	`，`, `︐`,
 	`､`, `︑`,
 )
 
