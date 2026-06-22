@@ -19,7 +19,7 @@ import (
 
 const name = "tate"
 
-const version = "0.0.9"
+const version = "0.0.10"
 
 var revision = "HEAD"
 
