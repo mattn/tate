@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"strings"
 	"testing"
@@ -33,5 +34,35 @@ func TestFail(t *testing.T) {
 	err := tate(&buf, &errReader{}, option{})
 	if err == nil {
 		t.Fatal("should be error")
+	}
+}
+
+type errWriter struct {
+	err error
+}
+
+func (w *errWriter) Write(b []byte) (int, error) {
+	return 0, w.err
+}
+
+func TestWriteFail(t *testing.T) {
+	want := errors.New("write failed")
+	err := tate(&errWriter{err: want}, strings.NewReader("x"), option{})
+	if !errors.Is(err, want) {
+		t.Fatalf("want %v, but %v", want, err)
+	}
+}
+
+type shortWriter struct {
+}
+
+func (w *shortWriter) Write(b []byte) (int, error) {
+	return len(b) - 1, nil
+}
+
+func TestShortWriteFail(t *testing.T) {
+	err := tate(&shortWriter{}, strings.NewReader("x"), option{})
+	if !errors.Is(err, io.ErrShortWrite) {
+		t.Fatalf("want %v, but %v", io.ErrShortWrite, err)
 	}
 }

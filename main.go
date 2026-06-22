@@ -140,6 +140,17 @@ type option struct {
 	reverse bool
 }
 
+func writeString(w io.Writer, s string) error {
+	n, err := w.Write([]byte(s))
+	if err != nil {
+		return err
+	}
+	if n != len(s) {
+		return io.ErrShortWrite
+	}
+	return nil
+}
+
 func tate(w io.Writer, r io.Reader, o option) error {
 	b, err := ioutil.ReadAll(r)
 	if err != nil {
@@ -194,9 +205,13 @@ func tate(w io.Writer, r io.Reader, o option) error {
 			} else {
 				s = "　"
 			}
-			w.Write([]byte(s))
+			if err := writeString(w, s); err != nil {
+				return err
+			}
 		}
-		w.Write([]byte("\n"))
+		if err := writeString(w, "\n"); err != nil {
+			return err
+		}
 	}
 	return nil
 }
